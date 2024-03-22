@@ -1,0 +1,17 @@
+:root{
+    --branco: white;
+--cor-de-fundo: #00162e;
+--fundo-senha: #00244D;
+--funfo-texto: #001E40;
+--borda: #0075ff;
+--roboto: 'roboto', sans-serif;
+--roboto-moto:"roboto mono" monospace;
+
+
+}
+
+body{
+    color: var (var(--branco));
+    background-color (var(--cor-de-fundo);
+    font-family: var(--roboto);
+}
