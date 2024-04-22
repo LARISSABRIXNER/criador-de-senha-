@@ -1,4 +1,77 @@
-<svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M30.2375 17.7308H8.65413C6.95126 17.7308 5.5708 19.1113 5.5708 20.8141V31.6058C5.5708 33.3087 6.95126 34.6891 8.65413 34.6891H30.2375C31.9403 34.6891 33.3208 33.3087 33.3208 31.6058V20.8141C33.3208 19.1113 31.9403 17.7308 30.2375 17.7308Z" stroke="#0075FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M11.7373 17.7308V11.5641C11.7354 9.65253 12.4438 7.80841 13.7251 6.38977C15.0064 4.97113 16.769 4.07918 18.671 3.88707C20.5729 3.69495 22.4783 4.21639 24.0174 5.35014C25.5565 6.4839 26.6194 8.14909 26.9998 10.0225V17.7308" stroke="#0075FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+const numeroSenha = document.querySelector('.parametro-senha__texto');
+let tamanhoSenha = 12;
+numeroSenha.textContent = tamanhoSenha;
+const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVXYWZ';
+const letrasMinusculas = 'abcdefghijklmnopqrstuvxywz';
+const numeros = '0123456789';
+const simbolos = '!@%*?';
+const botoes = document.querySelectorAll('.parametro-senha__botao');
+const campoSenha = document.querySelector('#campo-senha');
+const checkbox = document.querySelectorAll('.checkbox');
+const forcaSenha = document.querySelector('.forca');
+
+botoes[0].onclick = diminuiTamanho;
+botoes[1].onclick = aumentaTamanho;
+
+function diminuiTamanho() {
+    if (tamanhoSenha > 1) {
+        // tamanhoSenha = tamanhoSenha-1;
+        tamanhoSenha--;
+    }
+    numeroSenha.textContent = tamanhoSenha;
+    geraSenha();
+}
+function aumentaTamanho() {
+    if (tamanhoSenha < 20) {
+        // tamanhoSenha = tamanhoSenha+1;
+        tamanhoSenha++;
+    }
+    numeroSenha.textContent = tamanhoSenha;
+    geraSenha();
+}
+
+for (i = 0; i < checkbox.length; i++) {
+    checkbox[i].onclick = geraSenha;
+}
+
+geraSenha();
+
+function geraSenha() {
+    let alfabeto = '';
+    if (checkbox[0].checked) {
+        alfabeto = alfabeto + letrasMaiusculas;
+    }
+    if (checkbox[1].checked) {
+        alfabeto = alfabeto + letrasMinusculas;
+    }
+    if (checkbox[2].checked) {
+        alfabeto = alfabeto + numeros;
+    }
+    if (checkbox[3].checked) {
+        alfabeto = alfabeto + simbolos;
+    }
+    let senha = '';
+    for (let i = 0; i < tamanhoSenha; i++) {
+        let numeroAleatorio = Math.random() * alfabeto.length;
+        numeroAleatorio = Math.floor(numeroAleatorio);
+        senha = senha + alfabeto[numeroAleatorio];
+    }
+    campoSenha.value = senha;
+    classificaSenha(alfabeto.length);
+
+}
+
+function classificaSenha(tamanhoAlfabeto){
+    let entropia = tamanhoSenha * Math.log2(tamanhoAlfabeto);
+    console.log(entropia);
+    forcaSenha.classList.remove('fraca','media','forte');
+    if (entropia > 57){
+        forcaSenha.classList.add('forte');
+    } else if (entropia > 35 && entropia < 57 ) {
+        forcaSenha.classList.add('media');
+    } else if (entropia <= 35){
+        forcaSenha.classList.add('fraca');
+    }
+    const valorEntropia = document.querySelector('.entropia');
+    valorEntropia.textContent = 2**Math.floor(entropia)/(100e6*60*60*24);
+}
